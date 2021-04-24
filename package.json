@@ -1,0 +1,11 @@
+{
+  "name": "@petindo/breeds-api",
+  "version": "1.0.0",
+  "description": "Rest API Microservice to manage the Petindo Breeds database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Renan Gueiros <renangueiros@outlook.com>",
+  "license": "UNLICENSED"
+}
