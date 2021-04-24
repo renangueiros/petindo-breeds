@@ -1,5 +1,11 @@
+const database = require('./database')
 const server = require('./app')
 
-const init = server.listen
+const init = () => {
+  database.connect()
+    .then(() => {
+      server.listen()
+    })
+}
 
-module.exports.init = init
+module.exports.init = init()
