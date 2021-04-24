@@ -4,8 +4,12 @@
   "description": "Rest API Microservice to manage the Petindo Breeds database",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Renan Gueiros <renangueiros@outlook.com>",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }
