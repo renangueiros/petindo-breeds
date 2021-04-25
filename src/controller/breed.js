@@ -60,10 +60,10 @@ const postBreed = (req, res) => {
               {
                 name: breed.name
               }, {
-              $set: {
-                picture: breed.picture
-              }
-            }).then(() => {
+                $set: {
+                  picture: breed.picture
+                }
+              }).then(() => {
               return res.send(breed)
             })
           } else {
@@ -92,7 +92,6 @@ const putBreed = (req, res) => {
         .map((document) => {
           return new Breed({ ...document })
         }).toArray().then((breeds) => {
-
           if (breeds.length >= 2) {
             return res.status(400).send('Already have a Breed registered with this name')
           }
@@ -119,8 +118,8 @@ const putBreed = (req, res) => {
                 picture: breed.picture
               }
             }).then(() => {
-              return res.send(breed)
-            })
+            return res.send(breed)
+          })
         })
     })
 }
@@ -141,8 +140,7 @@ const deleteBreed = (req, res) => {
 }
 
 const searchBreed = (req, res) => {
-
-  let queryId;
+  let queryId
 
   if (req.query.id) {
     queryId = mongodb.ObjectID(req.query.id)
