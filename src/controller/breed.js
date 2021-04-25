@@ -135,9 +135,35 @@ const deleteBreed = (req, res) => {
       }
 
       breedsCollection().deleteOne({ _id: objectId })
-      
+
       res.send('Breed successfully deleted')
     })
+}
+
+const searchBreed = (req, res) => {
+
+  let queryId;
+
+  if (req.query.id) {
+    queryId = mongodb.ObjectID(req.query.id)
+  }
+
+  const queryName = req.query.name
+
+  breedsCollection().find({
+    $or: [
+      { _id: queryId },
+      { name: queryName }
+    ]
+  }).map((document) => {
+    return new Breed({ ...document })
+  }).toArray().then((breeds) => {
+    if (breeds.length >= 1) {
+      res.send(breeds)
+    } else {
+      res.status(400).send('No Breeds found')
+    }
+  })
 }
 
 module.exports.getAll = getAll
@@ -145,3 +171,4 @@ module.exports.getById = getById
 module.exports.postBreed = postBreed
 module.exports.putBreed = putBreed
 module.exports.deleteBreed = deleteBreed
+module.exports.searchBreed = searchBreed

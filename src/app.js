@@ -16,6 +16,7 @@ const listen = () => {
 app.use(express.json())
 
 app.get('/api/breeds', breedController.getAll)
+app.get('/api/breeds/search', breedController.searchBreed)
 app.get('/api/breeds/:id', breedController.getById)
 app.delete('/api/breeds/:id', breedController.deleteBreed)
 app.post(
