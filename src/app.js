@@ -1,5 +1,6 @@
 const express = require('express')
 
+const { upload } = require('./config/multer')
 const breedController = require('./controller/breed')
 
 const app = express()
@@ -13,5 +14,10 @@ const listen = () => {
 }
 
 app.get('/api/breeds', breedController.getAll)
+app.post(
+  '/api/breeds',
+  upload.single('picture'),
+  breedController.postBreed
+)
 
 module.exports.listen = listen
