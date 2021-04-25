@@ -35,8 +35,8 @@ const postBreed = (req, res) => {
   }
 
   breedsCollection().findOne({ name: breed.name })
-    .then((_breed) => {
-      if (_breed) {
+    .then((document) => {
+      if (document) {
         return res.status(400).send('This breed is already registered')
       }
 
@@ -55,7 +55,7 @@ const postBreed = (req, res) => {
               req.file.buffer
             )
 
-            breed.picture = `${HOST}:${PORT}/fullPath`
+            breed.picture = `${HOST}:${PORT}/${fullPath}`
 
             breedsCollection().updateOne(
               {
@@ -74,6 +74,59 @@ const postBreed = (req, res) => {
     })
 }
 
+const putBreed = (req, res) => {
+  const objectId = mongodb.ObjectID(req.params.id)
+
+  breedsCollection().findOne({ _id: objectId })
+    .then((document) => {
+      if (!document) {
+        return res.status(400).send('Breed not found')
+      }
+
+      const breed = new Breed({
+        _id: document._id,
+        name: req.body.name || document.name,
+        picture: document.picture
+      })
+
+      breedsCollection().find({ name: breed.name })
+        .map((document) => {
+          return new Breed({ ...document })
+        }).toArray().then((breeds) => {
+
+          if (breeds.length >= 2) {
+            return res.status(400).send('Already have a Breed registered with this name')
+          }
+
+          if (req.file) {
+            const basePath = 'public/images/breeds'
+            const mimeType = req.file.mimetype.split('/')[1]
+
+            const fullPath = `${basePath}/${breed._id}.${mimeType}`
+
+            fs.writeFileSync(
+              fullPath,
+              req.file.buffer
+            )
+
+            breed.picture = `${HOST}:${PORT}/${fullPath}`
+          }
+
+          breedsCollection().updateOne(
+            { _id: objectId }
+            , {
+              $set: {
+                name: breed.name,
+                picture: breed.picture
+              }
+            }).then(() => {
+              return res.send(breed)
+            })
+        })
+    })
+}
+
 module.exports.getAll = getAll
 module.exports.getById = getById
 module.exports.postBreed = postBreed
+module.exports.putBreed = putBreed

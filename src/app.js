@@ -22,5 +22,10 @@ app.post(
   upload.single('picture'),
   breedController.postBreed
 )
+app.put(
+  '/api/breeds/:id',
+  upload.single('picture'),
+  breedController.putBreed
+)
 
 module.exports.listen = listen
