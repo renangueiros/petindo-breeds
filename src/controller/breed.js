@@ -1,4 +1,4 @@
-const { ObjectId } = require('bson')
+const mongodb = require('mongodb')
 const fs = require('fs')
 
 const { breedsCollection } = require('../database')
@@ -13,6 +13,17 @@ const getAll = (req, res) => {
       return new Breed({ ...document })
     }).toArray().then((breeds) => {
       res.send(breeds)
+    })
+}
+
+const getById = (req, res) => {
+  const objectId = mongodb.ObjectID(req.params.id)
+
+  breedsCollection().findOne({ _id: objectId })
+    .then((document) => {
+      console.log(document)
+      const breed = new Breed({ ...document })
+      res.send(breed)
     })
 }
 
@@ -54,7 +65,7 @@ const postBreed = (req, res) => {
                 picture: breed.picture
               }
             }).then(() => {
-              return res.send(breed)  
+              return res.send(breed)
             })
           } else {
             return res.send(breed)
@@ -64,4 +75,5 @@ const postBreed = (req, res) => {
 }
 
 module.exports.getAll = getAll
+module.exports.getById = getById
 module.exports.postBreed = postBreed

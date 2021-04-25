@@ -13,7 +13,10 @@ const listen = () => {
   })
 }
 
+app.use(express.json())
+
 app.get('/api/breeds', breedController.getAll)
+app.get('/api/breeds/:id', breedController.getById)
 app.post(
   '/api/breeds',
   upload.single('picture'),
