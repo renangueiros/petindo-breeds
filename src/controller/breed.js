@@ -21,7 +21,6 @@ const getById = (req, res) => {
 
   breedsCollection().findOne({ _id: objectId })
     .then((document) => {
-      console.log(document)
       const breed = new Breed({ ...document })
       res.send(breed)
     })
@@ -126,7 +125,23 @@ const putBreed = (req, res) => {
     })
 }
 
+const deleteBreed = (req, res) => {
+  const objectId = mongodb.ObjectID(req.params.id)
+
+  breedsCollection().findOne({ _id: objectId })
+    .then((document) => {
+      if (!document) {
+        return res.status(400).send('Breed not found')
+      }
+
+      breedsCollection().deleteOne({ _id: objectId })
+      
+      res.send('Breed successfully deleted')
+    })
+}
+
 module.exports.getAll = getAll
 module.exports.getById = getById
 module.exports.postBreed = postBreed
 module.exports.putBreed = putBreed
+module.exports.deleteBreed = deleteBreed
